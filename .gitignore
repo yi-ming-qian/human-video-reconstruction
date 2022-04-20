@@ -1,0 +1,13 @@
+*.zip
+*.gz
+*.7z
+*.tar
+*.pyc
+*.obj
+*.pkl
+__pycache__/
+.idea/
+.vscode/
+debug*/
+PIFu/
+U-2-Net/
