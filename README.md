@@ -49,7 +49,7 @@ unzip -o results.zip
 
 5. Run PaMIR:
 ```bash
-python main_test.py
+python main_test.py -i {input_video_name}
 cd ../../data
 ls
 ```
