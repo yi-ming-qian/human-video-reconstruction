@@ -8,14 +8,39 @@ Interesting things always come first! The results for the three input videos are
 ## Method and discussions
 The reconstruction is based on "[PaMIR: Parametric Model-Conditioned Implicit Representation for Image-based Human Reconstruction](https://arxiv.org/abs/2007.03858)" published in TPAMI2021. The key idea of this paper is to regularize the free-form implicit shape representation by the body template model (SMPL) to improve accuracy and robustness under challenging senairos. Specifically, give a single RGB image, the method first obtains a SMPL model with an existing method. Then, the neural network takes the 2D image features extracted from RGB image and 3D shape features extracted from the SMPL estimation, concatenates the two types of features and empolys a decoder to output the occupancy probability, which is further converted to the final mesh. The method also use an optimization step to further refine the results by enforceing the consistency between the estimated occupancy and the initial SMPL model. In contrast to PiFU which uses free-form implict representation only, this paper incorporate parametric model SMPL and free-form implicit representation, and thus may work better for challenging poses and severe occlusions, which is the main reason for me to choose PaMIR for the provided three videos (the subjects in them show large pose variations). 
 
-PaMIR has several limitations. For example, the original paper shows failure cases on extremely challenging poses (Fig16 in their paper). To me, working with extremely challening poses requires highly accuare human segmentation and pose estimation, which is not easy to adderss and requires big data and powerful network architecture. Some other limitations include the reconstruction results lack of surface details, which maybe could be solved by RGB-guided super resolution. Another possible solution is to estimiate normal and shading information from the RGB image, which is a standard technique to acquire surface details in traditional 3D reconstruction. I notice that researchers have started to go along this direction such as [this work](https://phorhum.github.io/). 
+PaMIR has several limitations. For example, the original paper shows failure cases on extremely challenging poses (Fig16 in their paper). To me, working with extremely challening poses requires highly accurate human segmentation and pose estimation, which is not easy to adderss and requires big data and powerful network architecture. Some other limitations include the reconstruction results lack of surface details, which maybe could be solved by RGB-guided super resolution. Another possible solution is to estimiate normal and shading information from the RGB image, which is a standard technique to acquire surface details in traditional 3D reconstruction. I notice that researchers have started to go along this direction such as [this work](https://phorhum.github.io/). 
 
-Similar to other single-shot reconstruction methods such as PiFU, PaMIR requires human segmentation as input, is trained on single-person images. To work for multiple person instances, it is possible to take each separate human instance as input. PaMIR cannot work in real time, because it introduces two additional steps (SMPL estimation and optimization-based refinement). 
+Similar to other single-shot reconstruction methods such as PiFU, PaMIR requires human segmentation as input, and is trained on single-person images. To work for multiple person instances, it is possible to take each separate human instance as input. PaMIR cannot work in real time, because it introduces two additional steps (SMPL estimation and optimization-based refinement). 
 
-In this repo, I focus on improving PaMIR results with automaic and better human segmentation. In the original implementation of PaMIR, it uses a semantic segmentation method, followed by traditional MRF-based Grabcut to get the binary masks of human subjects (such a strategy makes me feel that the authors used manual Grabcut segmentation for refining their segmentation). My input here are videos, so an automatic method has to be chosen. My first trail is [U2Net for human segmentaion](https://github.com/xuebinqin/U-2-Net), which didn't give me a resonable segmentation results especially when the input videos show fast motion and have motion blurs. Considering my input is a video, the segmentaion results have to be temporally coherent so that my final 3D models would be temporally consistent. I fianlly end up with [Mediapipe](https://google.github.io/mediapipe/) for human segmentation from video inputs. While Mediapipe shows a bit over-segmenation in some frames, overall it works very well and obtain temporally consistent masks even when the images are very blurry, facilitating my final 3D models to be temporally consistent. 
+In this repo, I focus on improving PaMIR results with automaic and better human segmentation. In the original implementation of PaMIR, it uses a semantic segmentation method, followed by traditional MRF-based Grabcut to get the binary masks of human subjects (such a strategy makes me feel that the authors used manual Grabcut segmentation for refining their segmentation). My input here are videos, so an automatic method has to be chosen. My first trail is [U2Net for human segmentaion](https://github.com/xuebinqin/U-2-Net), which didn't give me a resonable segmentation results especially when the input videos show fast motion and have motion blurs. Considering my input is a video, the segmentaion results have to be temporally coherent so that my final 3D models would be temporally consistent. I fianlly end up with [Mediapipe](https://google.github.io/mediapipe/) for human segmentation from video inputs. While Mediapipe shows a bit over-segmenation in some frames, overall it works very well and obtain temporally consistent masks even when the images are very blurry, helping to get temporally consistent 3D model in the later stage. 
 
 
 # How to reproduce
+
+Clone the repository:
+```bash
+git clone https://github.com/yi-ming-qian/human-video-reconstruction.git
+```
+Install dependencies:
+```bash
+conda create -n pamir python=3.7.5
+conda activate pamir
+pip install -r requirements.txt
+```
+Preprocess input videos:
+Given an input video, I perform human segmentation, crop image to have the size of 512x512 as input (the script from PiFU is used), obtain 2D pose with openpose (I use the CPU-version Windows exe). 
+```bash
+cd data
+python preprocessing.py -i {input_video_name}
+cd ..
+```
+{input_video_name} denotes the video filename. In this repo, it is "FigureSkater", "JumpingJacks" or "Skateboarder".
+For fast prototyping, Windows exe is used for openpose, so it is not included in the above ```preprocessing.py```.
+Run PaMIR reconstruction:
+
+
+
+
 
 
 # PaMIR: Parametric Model-Conditioned Implicit Representation for Image-based Human Reconstruction

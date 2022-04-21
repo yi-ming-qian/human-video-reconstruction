@@ -18,7 +18,7 @@ pyrender
 PyWavelets
 PyYAML
 Rtree
-scikit-image
+scikit-image==0.17.2
 scikit-learn
 scipy
 tensorboard
@@ -31,3 +31,4 @@ tornado
 tqdm
 trimesh
 xxhash
+mediapipe
