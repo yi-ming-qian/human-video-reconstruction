@@ -1,8 +1,14 @@
+Human Reconstruction from Video
+
+This repo contains scripts for reconstructing 3D human models from a video.
+
+## Reconstruction results
+Important things come first! The results for the three input videos are shown in this html website. Each page contains hundreds of 3D models so it may take a while for loading. Feel free to use your mouse to play with the 3D models such as rotating.
+
+
 # PaMIR: Parametric Model-Conditioned Implicit Representation for Image-based Human Reconstruction
 [Zerong Zheng](http://zhengzerong.github.io/), [Tao Yu](http://ytrock.com/), [Yebin Liu](http://www.liuyebin.com/), [Qionghai Dai](http://media.au.tsinghua.edu.cn/qhdai_new.html)
 
-
-[![report](https://img.shields.io/badge/arxiv-report-red)](https://arxiv.org/abs/2007.03858)
 
 This repository contains a pytorch implementation of "[PaMIR: Parametric Model-Conditioned Implicit Representation for Image-based Human Reconstruction](https://arxiv.org/abs/2007.03858)". Tested with PyTorch 1.7.0 on Ubuntu 18.04, CUDA 11.0. 
 
