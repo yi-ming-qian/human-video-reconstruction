@@ -5,6 +5,7 @@
 *.pyc
 *.obj
 *.pkl
+*.pt
 __pycache__/
 .idea/
 .vscode/
