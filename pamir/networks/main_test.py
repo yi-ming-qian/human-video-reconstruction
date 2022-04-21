@@ -2,6 +2,7 @@ from __future__ import division, print_function
 
 import os
 import torch
+import argparse
 import pickle as pkl
 from tqdm import tqdm
 
@@ -116,7 +117,10 @@ def main_test_texture(test_img_dir, out_dir, pretrained_checkpoint_pamir,
 
 if __name__ == '__main__':
     iternum=50
-    input_image_dir = '/local-scratch/yimingq/unity/data/Skateboarder'
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-i', '--input_video', type=str, required=True)
+    args = parser.parse_args()
+    input_image_dir = f'../../data/{args.input_video}'
     output_dir = input_image_dir
     # input_image_dir = './results/test_data_real/'
     # output_dir = './results/test_data_real/'
